@@ -42,3 +42,7 @@ Change Log
 ## Version 1.3.1
 
  * Update commons
+
+## Version 1.3.2
+
+ * Update commons: filters RecyclerView.NO_POSITION (-1) values from being emitted

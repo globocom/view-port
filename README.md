@@ -44,7 +44,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.globocom:viewport-mobile:1.3.1'
+    implementation 'com.github.globocom:viewport-mobile:1.3.2'
 }
 ````
 
@@ -110,7 +110,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.globocom:viewport-tv:1.3.1'
+    implementation 'com.github.globocom:viewport-tv:1.3.2'
 }
 ````
 
