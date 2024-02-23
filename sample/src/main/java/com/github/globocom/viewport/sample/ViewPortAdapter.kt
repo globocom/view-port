@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.globocom.viewport.sample.databinding.ViewHolderViewPortSampleBinding
 
-class ViewPortSampleAdapter(private val listItems: List<Int>) :
-    RecyclerView.Adapter<ViewPortSampleViewHolder>() {
+class ViewPortAdapter(private val listItems: List<Int>) :
+    RecyclerView.Adapter<ViewPortViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ) = ViewPortSampleViewHolder(
+    ) = ViewPortViewHolder(
         ViewHolderViewPortSampleBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -19,7 +19,7 @@ class ViewPortSampleAdapter(private val listItems: List<Int>) :
         )
     )
 
-    override fun onBindViewHolder(holder: ViewPortSampleViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewPortViewHolder, position: Int) {
         holder.bind()
     }
 

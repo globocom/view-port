@@ -43,22 +43,23 @@ open class ViewPortVerticalGridView @JvmOverloads constructor(
 
     private val childSelectedListener by lazy {
         object : OnChildViewHolderSelectedListener() {
-            override fun onChildViewHolderSelected(
-                parent: RecyclerView,
+            override fun onChildViewHolderSelectedAndPositioned(
+                parent: RecyclerView?,
                 child: ViewHolder?,
                 position: Int,
                 subposition: Int
             ) {
-                super.onChildViewHolderSelected(parent, child, position, subposition)
+                super.onChildViewHolderSelectedAndPositioned(parent, child, position, subposition)
+                parent?.let {
+                    val firstVisibleItemPosition =
+                        ViewPortGridViewHelper.findFirstVisibleItemPosition(it)
 
-                val firstVisibleItemPosition =
-                    ViewPortGridViewHelper.findFirstVisibleItemPosition(parent)
+                    val lastVisibleItemPosition =
+                        ViewPortGridViewHelper.findLastCompletelyVisibleItemPosition(it)
 
-                val lastVisibleItemPosition =
-                    ViewPortGridViewHelper.findLastCompletelyVisibleItemPosition(parent)
-
-                firstAndLastVisibleItemsLiveData.value =
-                    Pair(firstVisibleItemPosition, lastVisibleItemPosition)
+                    firstAndLastVisibleItemsLiveData.value =
+                        Pair(firstVisibleItemPosition, lastVisibleItemPosition)
+                }
             }
         }
     }

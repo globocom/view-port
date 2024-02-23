@@ -27,7 +27,8 @@ open class ViewPortHorizontalGridView @JvmOverloads constructor(
         const val INSTANCE_STATE_IS_HEAR_BEAT_STARTED = "instanceStateIsHearBeatStarted"
         const val INSTANCE_STATE_IS_LIB_STARTED = "instanceStateIsLibStarted"
         const val INSTANCE_STATE_CURRENT_VISIBLE_ITEMS_LIST = "instanceStateCurrentVisibleItemsList"
-        const val INSTANCE_STATE_PREVIOUSLY_VISIBLE_ITEMS_LIST = "instanceStatePreviouslyVisibleItemsList"
+        const val INSTANCE_STATE_PREVIOUSLY_VISIBLE_ITEMS_LIST =
+            "instanceStatePreviouslyVisibleItemsList"
         const val INSTANCE_STATE_OLD_ITEMS_LIST = "instanceStateOldItemsList"
     }
 
@@ -43,26 +44,27 @@ open class ViewPortHorizontalGridView @JvmOverloads constructor(
 
     private val childSelectedListener by lazy {
         object : OnChildViewHolderSelectedListener() {
-            override fun onChildViewHolderSelected(
-                parent: RecyclerView,
+            override fun onChildViewHolderSelectedAndPositioned(
+                parent: RecyclerView?,
                 child: ViewHolder?,
                 position: Int,
                 subposition: Int
             ) {
-                super.onChildViewHolderSelected(parent, child, position, subposition)
+                super.onChildViewHolderSelectedAndPositioned(parent, child, position, subposition)
 
-                val firstVisibleItemPosition =
-                    ViewPortGridViewHelper.findFirstVisibleItemPosition(parent)
+                parent?.let {
+                    val firstVisibleItemPosition =
+                        ViewPortGridViewHelper.findFirstVisibleItemPosition(parent)
 
-                val lastVisibleItemPosition =
-                    ViewPortGridViewHelper.findLastCompletelyVisibleItemPosition(parent)
+                    val lastVisibleItemPosition =
+                        ViewPortGridViewHelper.findLastCompletelyVisibleItemPosition(parent)
 
-                firstAndLastVisibleItemsLiveData.value =
-                    Pair(firstVisibleItemPosition, lastVisibleItemPosition)
+                    firstAndLastVisibleItemsLiveData.value =
+                        Pair(firstVisibleItemPosition, lastVisibleItemPosition)
+                }
             }
         }
     }
-
 
     /**
      * [MutableLiveData] to be manipulated in that class. Client should access it's value by using
@@ -125,8 +127,14 @@ open class ViewPortHorizontalGridView @JvmOverloads constructor(
         viewPortManager?.let {
             myState.putBoolean(INSTANCE_STATE_IS_HEAR_BEAT_STARTED, it.isHearBeatStarted)
             myState.putBoolean(INSTANCE_STATE_IS_LIB_STARTED, it.isLibStarted)
-            myState.putIntArray(INSTANCE_STATE_CURRENT_VISIBLE_ITEMS_LIST, it.currentVisibleItemsList.toIntArray())
-            myState.putIntArray(INSTANCE_STATE_PREVIOUSLY_VISIBLE_ITEMS_LIST, it.previouslyVisibleItemsList.toIntArray())
+            myState.putIntArray(
+                INSTANCE_STATE_CURRENT_VISIBLE_ITEMS_LIST,
+                it.currentVisibleItemsList.toIntArray()
+            )
+            myState.putIntArray(
+                INSTANCE_STATE_PREVIOUSLY_VISIBLE_ITEMS_LIST,
+                it.previouslyVisibleItemsList.toIntArray()
+            )
             myState.putIntArray(INSTANCE_STATE_OLD_ITEMS_LIST, it.oldItemsList.toIntArray())
         }
 
@@ -139,9 +147,14 @@ open class ViewPortHorizontalGridView @JvmOverloads constructor(
             viewPortManager?.apply {
                 isHearBeatStarted = state.getBoolean(INSTANCE_STATE_IS_HEAR_BEAT_STARTED)
                 isLibStarted = state.getBoolean(INSTANCE_STATE_IS_LIB_STARTED)
-                currentVisibleItemsList = state.getIntArray(INSTANCE_STATE_CURRENT_VISIBLE_ITEMS_LIST)?.toMutableList() ?: mutableListOf()
-                previouslyVisibleItemsList = state.getIntArray(INSTANCE_STATE_PREVIOUSLY_VISIBLE_ITEMS_LIST)?.toMutableList() ?: mutableListOf()
-                oldItemsList = state.getIntArray(INSTANCE_STATE_OLD_ITEMS_LIST)?.toMutableList() ?: mutableListOf()
+                currentVisibleItemsList =
+                    state.getIntArray(INSTANCE_STATE_CURRENT_VISIBLE_ITEMS_LIST)?.toMutableList()
+                        ?: mutableListOf()
+                previouslyVisibleItemsList =
+                    state.getIntArray(INSTANCE_STATE_PREVIOUSLY_VISIBLE_ITEMS_LIST)?.toMutableList()
+                        ?: mutableListOf()
+                oldItemsList = state.getIntArray(INSTANCE_STATE_OLD_ITEMS_LIST)?.toMutableList()
+                    ?: mutableListOf()
             }
         } else {
             super.onRestoreInstanceState(state)
